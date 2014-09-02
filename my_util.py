@@ -68,4 +68,13 @@ def write_libsvm(pos_vec, neg_vec, filename):
 
 
 if __name__ == '__main__':
-    line_extract('example_file.txt', 2, 'result1.txt', 'result2.txt')
+    from repDNA.psenac import PseDNC
+
+    # Generate the PseDNC feature vector.
+    psednc = PseDNC(lamada=3, w=0.05)
+    pos_vec = psednc.make_psednc_vec(open('hotspots.fasta'))
+    neg_vec = psednc.make_psednc_vec(open('coldspots.fasta'))
+
+    write_libsvm(pos_vec, neg_vec, 'libsvm_vec.txt')
+
+    line_extract('libsvm_vec.txt', 2, 'extract1.txt', 'extract2.txt')
