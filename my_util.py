@@ -21,7 +21,7 @@ def line_extract(read_filename, extract_line_num, write_filename1, write_filenam
     """
     with open(read_filename) as f:
         lines = f.readlines()
-        write_line = extract_line_num[extract_line_num-1]
+        write_line = lines[extract_line_num-1]
         del lines[extract_line_num-1]
 
     with open(write_filename1, 'w') as f:
@@ -65,3 +65,7 @@ def write_libsvm(pos_vec, neg_vec, filename):
                 i += 1
             line += '\n'
             f.write(line)
+
+
+if __name__ == '__main__':
+    line_extract('example_file.txt', 2, 'result1.txt', 'result2.txt')
