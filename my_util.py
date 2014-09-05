@@ -127,5 +127,11 @@ if __name__ == '__main__':
     #
     # line_extract('libsvm_vec.txt', 2, 'extract1.txt', 'extract2.txt')
 
-    generate_fasta('H_sapiens_pos.txt', 'H_sapiens_pos.fasta')
-    generate_fasta('H_sapiens_neg.txt', 'H_sapiens_neg.fasta')
+    # generate_fasta('H_sapiens_pos.txt', 'H_sapiens_pos.fasta')
+    # generate_fasta('H_sapiens_neg.txt', 'H_sapiens_neg.fasta')
+
+    # generate_fasta('C_elegans_pos.txt', 'C_elegans_pos.fasta')
+    # generate_fasta('C_elegans_neg.txt', 'C_elegans_neg.fasta')
+
+    generate_fasta('D_melanogaster_pos.txt', 'D_melanogaster_pos.fasta')
+    generate_fasta('D_melanogaster_neg.txt', 'D_melanogaster_neg.fasta')
