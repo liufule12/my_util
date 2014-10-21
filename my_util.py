@@ -115,6 +115,73 @@ def generate_fasta(read_filename, write_filename):
                 f_write.write(write_line)
 
 
+def standard_deviation(value_list):
+    """Return standard deviation."""
+    from math import sqrt
+    from math import pow
+    n = len(value_list)
+    average_value = sum(value_list) * 1.0 / n
+    return sqrt(sum([pow(e - average_value, 2) for e in value_list]) * 1.0 / (n - 1))
+
+
+def normalize_index(phyche_index, is_convert_dict=False):
+    """Normalize the physicochemical index."""
+    normalize_phyche_value = []
+    for phyche_value in phyche_index:
+        average_phyche_value = sum(phyche_value) * 1.0 / len(phyche_value)
+        sd_phyche = standard_deviation(phyche_value)
+        normalize_phyche_value.append([round((e - average_phyche_value) / sd_phyche, 2) for e in phyche_value])
+
+    return normalize_phyche_value
+
+
+def add_property_id(property_name, property_dict, property_value):
+    """This function is for function read_index_file.
+    """
+    for i in range(1, 100):
+        temp_property = property_name + str(i)
+        if temp_property not in property_dict:
+            property_dict[temp_property] = property_value
+            return property_dict
+
+
+def read_index_file(filename):
+    with open(filename) as f:
+        lines = f.readlines()
+        dna_dict, rna_dict = {}, {}
+        dna_nucleic_acid = ['B-DNA', 'DNA', 'DNA/RNA']
+        rna_nucleic_acid = ['A-RNA', 'RNA', 'DNA/RNA']
+
+        for line in lines[1:]:
+            line = line.rstrip().split('\t')
+            nucleic_acid = line[-1]
+            property_name = line[1]
+            property_value = [float(e) for e in line[2:-2]]
+
+            # Add a property index in DNA.
+            if nucleic_acid in dna_nucleic_acid:
+                if property_name in dna_dict:
+                    dna_dict = add_property_id(property_name, dna_dict, property_value)
+                else:
+                    dna_dict[property_name] = property_value
+
+            # Add a property index in RNA.
+            if nucleic_acid in rna_nucleic_acid:
+                if property_name in rna_dict:
+                    rna_dict = add_property_id(property_name, rna_dict, property_value)
+                else:
+                    rna_dict[property_name] = property_value
+
+    dna_res = dna_dict.items()
+    rna_res = rna_dict.items()
+    for e in dna_res:
+        print(e)
+    print(len(dna_res))
+    print(len(rna_res))
+
+    return dna_dict, rna_dict
+
+
 if __name__ == '__main__':
     # from repDNA.psenac import PseDNC
     #
@@ -133,5 +200,10 @@ if __name__ == '__main__':
     # generate_fasta('C_elegans_pos.txt', 'C_elegans_pos.fasta')
     # generate_fasta('C_elegans_neg.txt', 'C_elegans_neg.fasta')
 
-    generate_fasta('D_melanogaster_pos.txt', 'D_melanogaster_pos.fasta')
-    generate_fasta('D_melanogaster_neg.txt', 'D_melanogaster_neg.fasta')
+    # generate_fasta('D_melanogaster_pos.txt', 'D_melanogaster_pos.fasta')
+    # generate_fasta('D_melanogaster_neg.txt', 'D_melanogaster_neg.fasta')
+
+    dna_dic, rna_dict = read_index_file('diindex_ID.txt')
+    res = normalize_index(dna_dic.values())
+    for e in res:
+        print(e)
