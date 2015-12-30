@@ -91,7 +91,7 @@ def generate_fasta(read_filename, write_filename):
                 f_write.write(write_line)
                 line_num += 1
             else:
-                print 'generate_fasta error! The first line is None!'
+                print('generate_fasta error! The first line is None!')
                 return
             del lines[0]
 
